@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
@@ -118,5 +117,30 @@ public class EmployeeController {
         employeeService.page(page1,lambdaQueryWrapper);
 
         return R.success(page1);
+    }
+    @PutMapping
+    public R<String> update( HttpServletRequest request ,@RequestBody Employee employee){
+
+        Long emp = (Long) request.getSession().getAttribute("employee");
+
+        employee.setUpdateTime(LocalDateTime.now());
+
+        employee.setUpdateUser(emp);
+
+        employeeService.updateById(employee);
+
+        return R.success("更改成功");
+
+    }
+    @GetMapping("/{id}")
+    public R<Employee> getById(@PathVariable Long id) {
+
+        Employee employee = employeeService.getById(id);
+        if (employee!=null){
+            return R.success(employee);
+        }
+        return R.error("没有查询到对应员工信息");
+
+
     }
 }

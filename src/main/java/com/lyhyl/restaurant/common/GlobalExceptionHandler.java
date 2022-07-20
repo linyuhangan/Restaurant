@@ -7,13 +7,18 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.sql.SQLIntegrityConstraintViolationException;
+
 
 @ControllerAdvice(annotations = {RestController.class, Controller.class})
 @ResponseBody
 @Slf4j
 public class GlobalExceptionHandler {
+    /**
+     * 全局异常处理
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public R<String> excertionHandler(SQLIntegrityConstraintViolationException ex){
         if (ex.getMessage().contains("Duplicate entry")){
