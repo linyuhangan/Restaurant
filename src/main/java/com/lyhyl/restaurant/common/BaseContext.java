@@ -1,7 +1,7 @@
 package com.lyhyl.restaurant.common;
 
 /**
- * 基于ThreadLocal封装的工具类，保存登录用户的Id
+ * 基于ThreadLocal封装的工具类，用于保存登录用户的Id
  */
 public class BaseContext {
     public static  ThreadLocal<Long> threadLocal = new ThreadLocal<>();

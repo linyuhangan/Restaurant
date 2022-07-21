@@ -28,4 +28,15 @@ public class GlobalExceptionHandler {
         return R.error("未知错误");
     }
 
+    /**
+     *
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(CustomException.class)
+    public R<String> excertionHandler(CustomException ex){
+
+        return R.error(ex.getMessage());
+    }
+
 }
