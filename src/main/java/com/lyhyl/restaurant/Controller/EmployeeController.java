@@ -77,7 +77,7 @@ public class EmployeeController {
 
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
         //创建时间
-        employee.setCreateTime(LocalDateTime.now());
+       /* employee.setCreateTime(LocalDateTime.now());
         //修改时间
         employee.setUpdateTime(LocalDateTime.now());
 
@@ -85,7 +85,7 @@ public class EmployeeController {
 
         employee.setCreateUser(empID);
 
-        employee.setUpdateUser(empID);
+        employee.setUpdateUser(empID);*/
 
        employeeService.save(employee);
 
@@ -121,11 +121,14 @@ public class EmployeeController {
     @PutMapping
     public R<String> update( HttpServletRequest request ,@RequestBody Employee employee){
 
-        Long emp = (Long) request.getSession().getAttribute("employee");
+        /*Long emp = (Long) request.getSession().getAttribute("employee");
 
         employee.setUpdateTime(LocalDateTime.now());
 
-        employee.setUpdateUser(emp);
+        employee.setUpdateUser(emp);*/
+
+        long l = Thread.currentThread().getId();
+        log.info("线程ID为：{}",l);
 
         employeeService.updateById(employee);
 

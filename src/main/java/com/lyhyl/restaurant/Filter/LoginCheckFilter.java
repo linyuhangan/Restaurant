@@ -1,6 +1,7 @@
 package com.lyhyl.restaurant.Filter;
 
 import com.alibaba.fastjson.JSON;
+import com.lyhyl.restaurant.common.BaseContext;
 import com.lyhyl.restaurant.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -47,6 +48,14 @@ public class LoginCheckFilter  implements Filter {
         //判断登陆状态，如果已经登陆则放行
         if (request.getSession().getAttribute("employee") != null){
             log.info("路径{}",requestURI);
+
+            //获取线程值
+            long l = Thread.currentThread().getId();
+            log.info("线程ID为：{}",l);
+
+            Long emp =(Long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(emp);
+
             filterChain.doFilter(request,response);
             return ;
         }
