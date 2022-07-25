@@ -21,12 +21,12 @@ import java.util.UUID;
 public class CommonController {
 
     /**
-     * 文件上传，路径 \target\classes\static\upload\6be9ad37-9b6c-4995-89b7-cf8df45f62ad.png (系统找不到指定的文件。)
+     * 文件上传
      * @param file
      * @return
      */
     @PostMapping("/upload")
-    public R<String> upload(MultipartFile file,String dir){
+    public R<String> upload(MultipartFile file){
         //获得文件名  123.jpg
         String originalFilename = file.getOriginalFilename();
         //获取后缀名 .jpg
@@ -36,8 +36,12 @@ public class CommonController {
         String fileName = UUID.randomUUID().toString() + suffix;
         String basePath = null;
         try {
-            basePath = ResourceUtils.getURL("classpath:").getPath() + "static/upload/" + (StringUtils.isNotBlank(dir) ? (dir + "/") : "");
+          //获取项目路径
+            File directory = new File("src\\main\\resources\\static\\images\\");
+            basePath = directory.getCanonicalPath();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -48,7 +52,7 @@ public class CommonController {
         }
 
         try {
-            file.transferTo(new File(basePath+fileName));
+            file.transferTo(new File(basePath+"/"+fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,11 +60,12 @@ public class CommonController {
         return R.success(fileName);
     }
     @GetMapping("/download")
-    public void downLoad(String name, HttpServletResponse response,String dir){
+    public void downLoad(String name, HttpServletResponse response){
         try {
-           String  basePath = ResourceUtils.getURL("classpath:").getPath() + "static/upload/" + (StringUtils.isNotBlank(dir) ? (dir + "/") : "");
+            File directory = new File("src\\main\\resources\\static\\images\\");
+            String basePath = directory.getCanonicalPath();
             //通过输入流 读取文件内容
-            FileInputStream fileInputStream = new FileInputStream(new File(basePath+name));
+            FileInputStream fileInputStream = new FileInputStream(new File(basePath+"/"+name));
             //通过输出流将文件写回浏览器，展示图片、
             ServletOutputStream outputStream = response.getOutputStream();
             int len = 0;
