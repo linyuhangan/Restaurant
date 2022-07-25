@@ -118,6 +118,13 @@ public class EmployeeController {
 
         return R.success(page1);
     }
+
+    /**
+     * 禁用启用员工
+     * @param request
+     * @param employee
+     * @return
+     */
     @PutMapping
     public R<String> update( HttpServletRequest request ,@RequestBody Employee employee){
 
@@ -135,6 +142,12 @@ public class EmployeeController {
         return R.success("更改成功");
 
     }
+
+    /**
+     * 查询员工信息
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}")
     public R<Employee> getById(@PathVariable Long id) {
 
