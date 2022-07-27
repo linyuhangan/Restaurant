@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lyhyl.restaurant.Mapper.DishMapper;
 import com.lyhyl.restaurant.Service.DishFlavorService;
 import com.lyhyl.restaurant.Service.DishService;
+import com.lyhyl.restaurant.common.CustomException;
 import com.lyhyl.restaurant.dto.DishDto;
 import com.lyhyl.restaurant.entity.Dish;
 import com.lyhyl.restaurant.entity.DishFlavor;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class DishServiceImpl  extends ServiceImpl<DishMapper, Dish> implements DishService {
     @Autowired
     private DishFlavorService dishFlavorService;
+
     /**
      * 新增菜品，同时保存口味数据
      * @param dishDto
@@ -91,5 +93,53 @@ public class DishServiceImpl  extends ServiceImpl<DishMapper, Dish> implements D
 
         dishFlavorService.saveBatch(flavors);
 
+    }
+    /**
+     * 删除单个菜品
+     * @param ids
+     */
+    @Override
+    public void remove(Long ids) {
+        Dish dish = this.getById(ids);
+       if (dish.getStatus() == 0){
+           //删除菜品
+           this.removeById(ids);
+           //删除口味
+           LambdaQueryWrapper<DishFlavor> queryWrapper = new LambdaQueryWrapper<>();
+           queryWrapper.in(DishFlavor::getDishId,ids);
+           dishFlavorService.remove(queryWrapper);
+       }else {
+           throw new CustomException("当前菜品还在售卖，不能删除");
+       }
+
+    }
+
+    /**
+     * 修改批量菜品起售禁售
+     * @param status
+     * @param ids
+     */
+    @Override
+    public void updateStatus(Integer status, List<Long> ids) {
+       /* //法1
+        for (Long i : ids) {
+            Dish dish = this.getById(i);
+            if (dish != null) {
+                dish.setStatus(status);
+                this.updateById(dish);
+            }
+        }*/
+        //法2
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper();
+        queryWrapper.in(ids !=null,Dish::getId,ids);
+        //根据数据进行批量查询
+        List<Dish> list = this.list(queryWrapper);
+
+        for (Dish dish : list) {
+            if (dish != null){
+                dish.setStatus(status);
+                this.updateById(dish);
+            }
+        }
     }
 }

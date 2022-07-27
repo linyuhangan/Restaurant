@@ -9,13 +9,10 @@ import com.lyhyl.restaurant.common.R;
 import com.lyhyl.restaurant.dto.DishDto;
 import com.lyhyl.restaurant.entity.Category;
 import com.lyhyl.restaurant.entity.Dish;
-import com.lyhyl.restaurant.entity.Employee;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,6 +120,36 @@ public class DishFlavorController {
         dishService.updatewithFlavor(dishDto);
 
         return R.success("更新成功");
+    }
+
+    /**
+     * 删除单个菜品
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public R<String> delete(Long ids){
+        log.info("ids:{}",ids);
+        dishService.remove(ids);
+        return R.success("删除成功");
+    }
+
+    /**
+     *单个/批量商品禁售起售
+     * @param status
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    //@RequestParam 使用List
+    //  但是如果参数使用数组形式，就不用加这个注解了
+    public R<String> update(@PathVariable Integer status,@RequestParam List<Long> ids){
+        log.info("status:{}",status);
+        log.info("ids:{}",ids);
+        //自定义禁售起售方法
+        dishService.updateStatus(status,ids);
+
+        return R.success("菜品状态修改成功");
     }
 
 }
