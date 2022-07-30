@@ -128,7 +128,7 @@ public class DishFlavorController {
      * @return
      */
     @DeleteMapping
-    public R<String> delete(Long ids){
+    public R<String> delete(@RequestParam List<Long> ids){
         log.info("ids:{}",ids);
         dishService.remove(ids);
         return R.success("删除成功");

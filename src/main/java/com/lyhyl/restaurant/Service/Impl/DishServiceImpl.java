@@ -94,10 +94,37 @@ public class DishServiceImpl  extends ServiceImpl<DishMapper, Dish> implements D
         dishFlavorService.saveBatch(flavors);
 
     }
+
+    /**
+     * 批量删除菜品
+     * @param ids
+     */
+    @Override
+    public void remove(List<Long> ids) {
+        for (Long i:ids) {
+            Dish dish = this.getById(i);
+            if (dish.getStatus()==0){
+           //删除菜品
+                this.removeById(i);
+          //删除口味
+                LambdaQueryWrapper<DishFlavor> lambdaQueryWrapper = new LambdaQueryWrapper();
+                lambdaQueryWrapper.in(DishFlavor::getDishId,i);
+                dishFlavorService.remove(lambdaQueryWrapper);
+
+            }else {
+                throw new CustomException("当前菜品还在售卖，不能删除");
+            }
+
+
+        }
+
+
+
+    }
     /**
      * 删除单个菜品
      * @param ids
-     */
+     *//*
     @Override
     public void remove(Long ids) {
         Dish dish = this.getById(ids);
@@ -112,7 +139,7 @@ public class DishServiceImpl  extends ServiceImpl<DishMapper, Dish> implements D
            throw new CustomException("当前菜品还在售卖，不能删除");
        }
 
-    }
+    }*/
 
     /**
      * 修改批量菜品起售禁售

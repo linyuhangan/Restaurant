@@ -13,8 +13,8 @@ public interface DishService extends IService<Dish> {
     public  DishDto getByIdWithFlavor(Long id);
     //更新信息
     public void updatewithFlavor(DishDto dishDto);
-    //删除菜品
-    public void remove(Long ids);
+    //批量删除菜品
+    public void remove(List<Long> ids);
     //批量起售禁售
     public void updateStatus(Integer status, List<Long> ids);
 }
