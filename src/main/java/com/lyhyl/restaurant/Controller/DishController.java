@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/dish")
 @Slf4j
-public class DishFlavorController {
+public class DishController {
     @Autowired
     private DishService dishService;
     @Autowired
@@ -123,7 +123,7 @@ public class DishFlavorController {
     }
 
     /**
-     * 删除单个菜品
+     * 删除单个/批量菜品
      * @param ids
      * @return
      */
@@ -150,6 +150,28 @@ public class DishFlavorController {
         dishService.updateStatus(status,ids);
 
         return R.success("菜品状态修改成功");
+    }
+
+    /**
+     * 根据条件查询对应菜品数据
+     * @param dish
+     * @return
+     */
+    @GetMapping("/list")
+    public  R<List<Dish>> list(Dish dish){
+
+        LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        //等值查询
+        lambdaQueryWrapper.eq(dish.getCategoryId()!=null,Dish::getCategoryId,dish.getCategoryId());
+        //查询状态是在售的菜品
+        lambdaQueryWrapper.eq(Dish::getStatus,1);
+        //排序
+        lambdaQueryWrapper.orderByAsc(Dish::getSort).orderByAsc(Dish::getUpdateTime);
+
+        List<Dish> list = dishService.list(lambdaQueryWrapper);
+
+
+        return  R.success(list);
     }
 
 }
