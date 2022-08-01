@@ -29,10 +29,12 @@ public class LoginCheckFilter  implements Filter {
 
         //设置无需过滤的资源
         String[] urls = new String[]{
-                "/employee/login",
-                "/employee/logout",
-                "/backend/**",
-                "/front/**"
+                "/employee/login",//登录不拦截
+                "/employee/logout",//退出登录不拦截
+                "/backend/**",//backend静态资源不拦截
+                "/front/**",//front静态资源不拦截
+                "/user/login",//移动端登录
+                "/user/sendMsg"//移动端发送短信
         };
 
         //判断本次请求是否需要处理
@@ -54,6 +56,21 @@ public class LoginCheckFilter  implements Filter {
 
             Long emp =(Long) request.getSession().getAttribute("employee");
             BaseContext.setCurrentId(emp);
+
+            filterChain.doFilter(request,response);
+            return ;
+        }
+
+        //判断登陆状态，如果已经登陆则放行
+        if (request.getSession().getAttribute("user") != null){
+            log.info("路径{}",requestURI);
+
+            //获取线程值
+            long l = Thread.currentThread().getId();
+            log.info("线程ID为：{}",l);
+
+            Long user =(Long) request.getSession().getAttribute("user");
+            BaseContext.setCurrentId(user);
 
             filterChain.doFilter(request,response);
             return ;
