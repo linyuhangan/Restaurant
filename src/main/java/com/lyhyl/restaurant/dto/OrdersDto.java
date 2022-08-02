@@ -11,6 +11,8 @@ public class OrdersDto extends Orders {
 
     private String userName;
 
+    private int sumNum;
+
     private String phone;
 
     private String address;
