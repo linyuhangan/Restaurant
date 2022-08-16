@@ -96,8 +96,6 @@ public class ShoppingCartController {
             //减少的是菜品
             lambdaQueryWrapper.eq(ShoppingCart::getDishId,shoppingCart.getDishId());
 
-
-
         }else {
             //减少的是套餐
             lambdaQueryWrapper.eq(ShoppingCart::getSetmealId,shoppingCart.getSetmealId());

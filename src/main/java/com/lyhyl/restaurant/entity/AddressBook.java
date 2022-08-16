@@ -2,6 +2,8 @@ package com.lyhyl.restaurant.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,18 +12,20 @@ import java.time.LocalDateTime;
  * 地址簿
  */
 @Data
+//@TableName("对应表名")
 public class AddressBook implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
 
+    private Long id;
 
     //用户id
     private Long userId;
 
 
     //收货人
+    //@TableId将属性所对应的字段设置为主键
     private String consignee;
 
 
